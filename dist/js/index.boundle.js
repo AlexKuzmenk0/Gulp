@@ -1,1 +1,1 @@
-console.log("hello world!");
+(()=>{"use strict";console.log("Hello ping")})();

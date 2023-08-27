@@ -9,6 +9,8 @@ const sourceMaps = require('gulp-sourcemaps');
 const plumber = require('gulp-plumber');
 const notify = require('gulp-notify');
 const webpack = require('webpack-stream');
+const imagemin = require('gulp-imagemin');
+const changed = require('gulp-changed');
 
 
 // Обработка CLEAN
@@ -42,7 +44,8 @@ const plumberNotify = (title) => {
 // Обработка HTML
 gulp.task('html', () => {
   return gulp
-    .src('./src/*.html')
+    .src('./src/html/**/*.html')
+    .pipe(changed('./dist/'))
     .pipe(plumber(plumberNotify('HTML')))
     .pipe(fileInclude(fileIncludeSetting))
     .pipe(gulp.dest('./dist'))
@@ -52,6 +55,7 @@ gulp.task('html', () => {
 gulp.task('sass', () => {
   return gulp
     .src('./src/scss/*.scss')
+    .pipe(changed('./dist/css/'))
     .pipe(plumber(plumberNotify('Scss')))
     .pipe(sourceMaps.init())
     .pipe(sass())
@@ -64,6 +68,7 @@ gulp.task('sass', () => {
 gulp.task('js', () => {
   return gulp
     .src('./src/js/*.js')
+    .pipe(changed('./dist/js/'))
     .pipe(plumber(plumberNotify('JS')))
     .pipe(webpack(require('./webpack.config')))
     .pipe(gulp.dest('./dist/js'))
@@ -73,6 +78,7 @@ gulp.task('js', () => {
 gulp.task('icons', () => {
   return gulp
     .src('./src/icons/**/*')
+    .pipe(changed('./dist/icons/'))
     .pipe(gulp.dest('./dist/icons/'))
 
 });
@@ -82,6 +88,8 @@ gulp.task('icons', () => {
 gulp.task('images', () => {
   return gulp
     .src('./src/images/**/*')
+    .pipe(changed('./dist/images/'))
+    .pipe(imagemin({verbose: true}))
     .pipe(gulp.dest('./dist/images/'))
 
 });
@@ -90,6 +98,7 @@ gulp.task('images', () => {
 gulp.task('fonts', () => {
   return gulp
     .src('./src/fonts/**/*')
+    .pipe(changed('./dist/fonts/'))
     .pipe(gulp.dest('./dist/fonts/'))
 
 });
@@ -98,6 +107,7 @@ gulp.task('fonts', () => {
 gulp.task('files', () => {
   return gulp
     .src('./src/files/**/*')
+    .pipe(changed('./dist/files/'))
     .pipe(gulp.dest('./dist/files/'))
 
 });
